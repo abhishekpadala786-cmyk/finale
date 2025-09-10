@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tourist Emergency Dashboard - Wristband Alert System</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1e3d59;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1, h2 {
+      margin-bottom: 10px;
+    }
+
+    .status {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
+
+    .alert {
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .alert-danger {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .alert-warning {
+      background-color: #f39c12;
+      color: white;
+    }
+
+    .alert-success {
+      background-color: #27ae60;
+      color: white;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px 20px 0;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3498db;
+    }
+
+    .log {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    label {
+      display: block;
+      margin: 8px 0 4px;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Wristband Alert Dashboard</h1>
+    <p>Tourist Emergency System During Natural Disasters</p>
+  </header>
+
+  <div class="container">
+    <div class="status">
+      System Status: <strong id="system-status" style="color: green;">Normal</strong>
+    </div>
+
+    <div class="alert alert-danger" id="disaster-alert">
+      ⚠️ Natural disaster detected! Tourist may be in danger.
+    </div>
+
+    <div class="alert alert-warning" id="food-alert">
+      ⚠️ No food detected with tourist. Urgent attention needed!
+    </div>
+
+    <div class="alert alert-success" id="help-sent">
+      ✅ Emergency help request sent on behalf of tourist.
+    </div>
+
+    <label><input type="checkbox" id="has-food" checked /> Tourist has food</label>
+    <label><input type="checkbox" id="can-call-help" checked /> Tourist can call for help</label>
+
+    <button onclick="simulateDisaster()">Simulate Disaster Detection</button>
+    <button onclick="resetSystem()">Reset System</button>
+
+    <h3>System Logs</h3>
+    <div class="log" id="log">
+      [INFO] System initialized.<br>
+    </div>
+  </div>
+
+  <script>
+    const systemStatus = document.getElementById("system-status");
+    const disasterAlert = document.getElementById("disaster-alert");
+    const foodAlert = document.getElementById("food-alert");
+    const helpSent = document.getElementById("help-sent");
+    const logBox = document.getElementById("log");
+
+    const hasFoodCheckbox = document.getElementById("has-food");
+    const canCallHelpCheckbox = document.getElementById("can-call-help");
+
+    function log(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      logBox.innerHTML += `[${timestamp}] ${message}<br>`;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function simulateDisaster() {
+      log("Natural disaster detected via wristband sensor.");
+      systemStatus.textContent = "Disaster Detected";
+      systemStatus.style.color = "red";
+      disasterAlert.style.display = "block";
+
+      const hasFood = hasFoodCheckbox.checked;
+      const canCallHelp = canCallHelpCheckbox.checked;
+
+      if (!hasFood) {
+        foodAlert.style.display = "block";
+        log("Tourist has no food available.");
+      }
+
+      if (!canCallHelp || !hasFood) {
+        sendHelpRequest();
+      } else {
+        log("Tourist is able to call for help and has food.");
+      }
+    }
+
+    function sendHelpRequest() {
+      helpSent.style.display = "block";
+      log("🚨 Emergency services contacted on behalf of tourist.");
+      // API call to backend could go here
+    }
+
+    function resetSystem() {
+      systemStatus.textContent = "Normal";
+      systemStatus.style.color = "green";
+      disasterAlert.style.display = "none";
+      foodAlert.style.display = "none";
+      helpSent.style.display = "none";
+      log("System reset to normal state.");
+    }
+
+    window.onload = () => {
+      log("Dashboard ready.");
+    };
+  </script>
+
+</body>
+</html>
